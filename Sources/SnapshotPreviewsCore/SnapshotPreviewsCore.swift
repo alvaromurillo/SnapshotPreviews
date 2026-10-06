@@ -28,13 +28,16 @@ public struct Preview: Identifiable {
     var layout = PreviewLayout.device
     for t in traits {
       if let value = Mirror(reflecting: t).descendant("value") {
+        // String(describing:) of DeveloperToolsSupport.PreviewInterfaceOrientation is the bare
+        // case name ("landscapeLeft"); String(reflecting:) keeps the qualified ".landscapeLeft" form.
+        let name = String(reflecting: value)
         if let value = value as? PreviewLayout {
           layout = value
-        } else if String(describing: value).hasSuffix(".portraitUpsideDown") {
+        } else if name.hasSuffix(".portraitUpsideDown") {
           orientation = .portraitUpsideDown
-        } else if String(describing: value).hasSuffix(".landscapeLeft") {
+        } else if name.hasSuffix(".landscapeLeft") {
           orientation = .landscapeLeft
-        } else if String(describing: value).hasSuffix(".landscapeRight") {
+        } else if name.hasSuffix(".landscapeRight") {
           orientation = .landscapeRight
         }
       }
