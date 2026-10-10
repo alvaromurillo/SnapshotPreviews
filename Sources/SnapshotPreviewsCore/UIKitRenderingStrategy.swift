@@ -5,7 +5,7 @@
 //  Created by Noah Martin on 7/5/24.
 //
 
-#if canImport(UIKit) && !os(watchOS) && !os(visionOS) && !os(tvOS)
+#if canImport(UIKit) && !os(watchOS) && !os(visionOS)
 import Foundation
 import UIKit
 import SwiftUI
@@ -19,8 +19,13 @@ public class UIKitRenderingStrategy: RenderingStrategy {
       .first ?? UIApplication.shared.connectedScenes.first
 
     let window = windowScene != nil ? UIWindow(windowScene: windowScene as! UIWindowScene) : UIWindow()
+    #if os(tvOS)
+    // tvOS has no status bar window level and no system background color.
+    window.windowLevel = .normal + 1
+    #else
     window.windowLevel = .statusBar + 1
     window.backgroundColor = UIColor.systemBackground
+    #endif
     window.makeKeyAndVisible()
     self.window = window
     self.a11yWrapper = a11yWrapper
@@ -32,7 +37,9 @@ public class UIKitRenderingStrategy: RenderingStrategy {
 
   private let window: UIWindow
   private let a11yWrapper: ((UIViewController, UIWindow, PreviewLayout) -> UIView)?
+  #if !os(tvOS)
   private var geometryUpdateError: Error?
+  #endif
 
   @MainActor
   public func render(
@@ -40,6 +47,10 @@ public class UIKitRenderingStrategy: RenderingStrategy {
       completion: @escaping (SnapshotResult) -> Void
   ) {
       Self.setup()
+      #if os(tvOS)
+      // tvOS has a single interface orientation, so there is nothing to rotate.
+      performRender(preview: preview, completion: completion)
+      #else
       geometryUpdateError = nil
       let targetOrientation = preview.orientation.toInterfaceOrientation()
       guard #available(iOS 16.0, *), windowScene!.interfaceOrientation != targetOrientation else {
@@ -56,8 +67,10 @@ public class UIKitRenderingStrategy: RenderingStrategy {
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
           self?.waitForOrientationChange(targetOrientation: targetOrientation, preview: preview, attempts: 50, completion: completion)
       }
+      #endif
   }
 
+  #if !os(tvOS)
   @MainActor private func waitForOrientationChange(
       targetOrientation: UIInterfaceOrientation,
       preview: SnapshotPreviewsCore.Preview,
@@ -86,6 +99,7 @@ public class UIKitRenderingStrategy: RenderingStrategy {
           }
       }
   }
+  #endif
 
   @MainActor private func performRender(
     preview: SnapshotPreviewsCore.Preview,

@@ -27,7 +27,7 @@ class Snapshots {
   let server = HTTPServer(address: .loopback(port: 38824))
 
   public init() {
-    #if canImport(UIKit) && !os(watchOS) && !os(visionOS) && !os(tvOS)
+    #if canImport(UIKit) && !os(watchOS) && !os(visionOS)
     renderingStrategy = UIKitRenderingStrategy()
     #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
     renderingStrategy = AppKitRenderingStrategy()

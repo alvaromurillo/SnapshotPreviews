@@ -14,7 +14,7 @@ public enum RenderingError: Error {
   case orientationChangeTimeout
 }
 
-#if canImport(UIKit) && !os(visionOS) && !os(watchOS) && !os(tvOS)
+#if canImport(UIKit) && !os(visionOS) && !os(watchOS)
 import Foundation
 import SwiftUI
 import UIKit

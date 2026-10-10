@@ -26,6 +26,7 @@ public enum EmergeRenderingMode: Int {
     
   /// Renders using `NSView.bitmapImageRepForCachingDisplay`.
   @available(iOS, unavailable)
+  @available(tvOS, unavailable)
   case nsView
 
   /// Renders the entire window instead of the previewed view.

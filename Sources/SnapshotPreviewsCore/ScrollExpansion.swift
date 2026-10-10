@@ -68,7 +68,7 @@ extension ScrollExpansionProviding {
 }
 #endif
 
-#if canImport(UIKit) && !os(visionOS) && !os(watchOS) && !os(tvOS)
+#if canImport(UIKit) && !os(visionOS) && !os(watchOS)
 extension UIScrollView: ContentHeightProviding {
 
   var contentHeight: CGFloat {

@@ -12,7 +12,7 @@ import UIKit
 import SwiftUI
 import SnapshotSharedModels
 
-#if canImport(UIKit) && !os(visionOS) && !os(watchOS) && !os(tvOS)
+#if canImport(UIKit) && !os(visionOS) && !os(watchOS)
 
 public final class ExpandingViewController: UIHostingController<EmergeModifierView>, ScrollExpansionProviding {
 
@@ -38,7 +38,7 @@ public final class ExpandingViewController: UIHostingController<EmergeModifierVi
   init<Content: View>(rootView: Content) {
     super.init(rootView: EmergeModifierView(wrapped: rootView))
 
-    if #available(iOS 16, *) {
+    if #available(iOS 16, tvOS 16, *) {
       sizingOptions = .intrinsicContentSize
     }
     view.translatesAutoresizingMaskIntoConstraints = false

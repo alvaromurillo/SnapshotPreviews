@@ -193,7 +193,7 @@ open class SnapshotTest: PreviewBaseTest, PreviewFilters {
     nil
   }
 
-  #if canImport(UIKit) && !os(watchOS) && !os(visionOS) && !os(tvOS)
+  #if canImport(UIKit) && !os(watchOS) && !os(visionOS)
   open class func setupA11y() -> ((UIViewController, UIWindow, PreviewLayout) -> UIView)? {
     return nil
   }
@@ -203,7 +203,7 @@ open class SnapshotTest: PreviewBaseTest, PreviewFilters {
   ///
   /// This method selects between UIKit, AppKit, and SwiftUI rendering strategies depending on the available frameworks and OS version.
   /// - Returns: A `RenderingStrategy` object suitable for the current environment.
-  #if canImport(UIKit) && !os(watchOS) && !os(visionOS) && !os(tvOS)
+  #if canImport(UIKit) && !os(watchOS) && !os(visionOS)
   private static func makeRenderingStrategy(a11y: ((UIViewController, UIWindow, PreviewLayout) -> UIView)?) -> RenderingStrategy {
     return UIKitRenderingStrategy(a11yWrapper: a11y)
   }
@@ -306,7 +306,7 @@ open class SnapshotTest: PreviewBaseTest, PreviewFilters {
     if let existing = Self.renderingStrategy {
       strategy = existing
     } else {
-      #if canImport(UIKit) && !os(watchOS) && !os(visionOS) && !os(tvOS)
+      #if canImport(UIKit) && !os(watchOS) && !os(visionOS)
       strategy = Self.makeRenderingStrategy(a11y: Self.setupA11y())
       #else
       strategy = Self.makeRenderingStrategy()
