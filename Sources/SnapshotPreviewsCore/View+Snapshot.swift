@@ -85,7 +85,7 @@ extension View {
 
   private static func setupRootVC(subVC: UIViewController) -> UIViewController {
     let windowRootVC = UIViewController()
-    windowRootVC.view.bounds = UIScreen.main.bounds
+    windowRootVC.view.bounds = UIScreen.snapshot.bounds
     windowRootVC.view.backgroundColor = .clear
 
     let containerVC = UIViewController()
@@ -94,8 +94,8 @@ extension View {
     windowRootVC.view.addSubview(containerVC.view)
     windowRootVC.addChild(containerVC)
     containerVC.didMove(toParent: windowRootVC)
-    containerVC.view.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
-    containerVC.view.heightAnchor.constraint(greaterThanOrEqualToConstant: UIScreen.main.bounds.height).isActive = true
+    containerVC.view.widthAnchor.constraint(equalToConstant: UIScreen.snapshot.bounds.width).isActive = true
+    containerVC.view.heightAnchor.constraint(greaterThanOrEqualToConstant: UIScreen.snapshot.bounds.height).isActive = true
     containerVC.view.centerXAnchor.constraint(equalTo: windowRootVC.view.centerXAnchor).isActive = true
     containerVC.view.centerYAnchor.constraint(equalTo: windowRootVC.view.centerYAnchor).isActive = true
 
@@ -105,7 +105,7 @@ extension View {
 
     subVC.view.centerXAnchor.constraint(equalTo: containerVC.view.centerXAnchor).isActive = true
     subVC.view.centerYAnchor.constraint(equalTo: containerVC.view.centerYAnchor).isActive = true
-    subVC.view.widthAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.width).isActive = true
+    subVC.view.widthAnchor.constraint(lessThanOrEqualToConstant: UIScreen.snapshot.bounds.width).isActive = true
     containerVC.view.heightAnchor.constraint(greaterThanOrEqualTo: subVC.view.heightAnchor, multiplier: 1).isActive = true
 
     return windowRootVC
@@ -151,12 +151,12 @@ extension View {
     default:
       let viewSize = view.bounds.size
 
-      targetSize = CGSize(width: UIScreen.main.bounds.size.width, height: max(viewSize.height, UIScreen.main.bounds.size.height))
+      targetSize = CGSize(width: UIScreen.snapshot.bounds.size.width, height: max(viewSize.height, UIScreen.snapshot.bounds.size.height))
       drawCode = { ctx in
         success = rootVC.view.render(size: targetSize, mode: renderingMode, context: ctx)
       }
     }
-    let scale = Double(UIScreen.main.scale)
+    let scale = Double(UIScreen.snapshot.scale)
     let totalPixels = Double(targetSize.width) * scale * Double(targetSize.height) * scale
     if targetSize.height > maxSize || targetSize.width > maxSize || totalPixels > maxTotalPixels {
       return .failure(RenderingError.maxSize(targetSize))
@@ -174,7 +174,7 @@ extension View {
 
 extension CGSize {
   var requiresCoreAnimationSnapshot: Bool {
-    height >= UIScreen.main.bounds.size.height * 2
+    height >= UIScreen.snapshot.bounds.size.height * 2
   }
 }
 

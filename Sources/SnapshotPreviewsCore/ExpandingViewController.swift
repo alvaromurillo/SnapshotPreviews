@@ -66,7 +66,7 @@ public final class ExpandingViewController: UIHostingController<EmergeModifierVi
       heightAnchor = view.heightAnchor.constraint(equalToConstant: height)
       heightAnchor?.isActive = true
     default:
-      let fittingSize = sizeThatFits(in: UIScreen.main.bounds.size)
+      let fittingSize = sizeThatFits(in: UIScreen.snapshot.bounds.size)
       widthAnchor = view.widthAnchor.constraint(greaterThanOrEqualToConstant: fittingSize.width)
       widthAnchor?.isActive = true
       heightAnchor = view.heightAnchor.constraint(greaterThanOrEqualToConstant: fittingSize.height)
@@ -117,7 +117,7 @@ public final class ExpandingViewController: UIHostingController<EmergeModifierVi
                 clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW) - start >= (HeightExpansionTimeLimitInSeconds * 1_000_000_000) else {
               return
           }
-          let timeoutError = RenderingError.expandingViewTimeout(CGSize(width: UIScreen.main.bounds.size.width,
+          let timeoutError = RenderingError.expandingViewTimeout(CGSize(width: UIScreen.snapshot.bounds.size.width,
                                                                         height: firstScrollView?.visibleContentHeight ?? -1))
           NSLog("ExpandingViewController: Expanding Scroll View timed out. Current height is \(firstScrollView?.visibleContentHeight ?? -1)")
           runCallback(timeoutError)
